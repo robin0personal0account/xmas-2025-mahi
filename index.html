@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merry Christmas, KK!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Shadows+Into+Light&family=Patrick+Hand&family=Schoolbell&family=Homemade+Apple&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a2e1d;
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Loading Screen - EXACTLY AS BEFORE */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0a2e1d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-content {
+            width: 300px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .insta-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e63946;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+            background-image: url('https://i.pinimg.com/736x/74/47/7a/74477afe6fa92eef3b36d2077298d0cc.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .username {
+            font-weight: 600;
+            color: #262626;
+        }
+        
+        .insta-image {
+            height: 300px;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+                        url('https://i.pinimg.com/1200x/d1/bc/5a/d1bc5a1b024da0a0048ba577fa2bb85c.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .insta-icons {
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .left-icons i {
+            margin-right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #262626;
+        }
+        
+        .likes {
+            padding: 0 15px 10px;
+            font-weight: 600;
+            color: #262626;
+            font-size: 14px;
+        }
+        
+        .caption {
+            padding: 0 15px 15px;
+            color: #262626;
+            font-size: 14px;
+        }
+        
+        .caption span {
+            font-weight: 600;
+        }
+        
+        .like-hand {
+            position: absolute;
+            font-size: 40px;
+            z-index: 10;
+            opacity: 0;
+        }
+        
+        /* Gate Animation */
+        .gate-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 900;
+            pointer-events: none;
+        }
+        
+        .gate-left, .gate-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0a2e1d 100%);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .gate-left {
+            left: 0;
+            transform-origin: left center;
+        }
+        
+        .gate-right {
+            right: 0;
+            transform-origin: right center;
+        }
+        
+        /* Main Content - HANDWRITTEN LETTER STYLE */
+        .main-content {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: #f8f1e5;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Paper Texture Background */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, rgba(182,164,124,0.1) 1px, transparent 1px),
+                linear-gradient(rgba(182,164,124,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .letter-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* The Letter Paper */
+        .letter-paper {
+            background: #fffef7;
+            border-radius: 3px;
+            padding: 50px 60px;
+            position: relative;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.1),
+                0 0 0 1px #e6d9c2,
+                0 0 0 2px #fff,
+                0 0 0 4px #e6d9c2;
+            min-height: 600px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        /* Handwriting Paper Lines */
+        .paper-lines {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            right: 60px;
+            bottom: 60px;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                transparent 39px, 
+                rgba(182,164,124,0.15) 39px, 
+                rgba(182,164,124,0.15) 40px
+            );
+            background-size: 100% 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Red margin line on left */
+        .margin-line {
+            position: absolute;
+            left: 40px;
+            top: 50px;
+            bottom: 50px;
+            width: 4px;
+            background-color: #e63946;
+            border-radius: 2px;
+        }
+        
+        /* Christmas Message */
+        .letter-content {
+            position: relative;
+            z-index: 2;
+            padding-left: 10px;
+        }
+        
+        .message-line {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            font-family: 'Gochi Hand', cursive;
+            font-size: 26px;
+            color: #4a3c2a;
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        /* Different handwriting styles for variation */
+        .message-line:nth-child(odd) {
+            font-family: 'Patrick Hand', cursive;
+        }
+        
+        .message-line:nth-child(3n) {
+            font-family: 'Schoolbell', cursive;
+        }
+        
+        .message-line:nth-child(4) {
+            font-family: 'Shadows Into Light', cursive;
+        }
+        
+        .message-line:nth-child(7) {
+            font-family: 'Homemade Apple', cursive;
+        }
+        
+        /* Special styling for the Christmas/New Year lines */
+        .message-line:nth-child(8) {
+            font-size: 32px;
+            color: #e63946;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-family: 'Homemade Apple', cursive;
+        }
+        
+        .message-line:nth-child(9) {
+            font-size: 30px;
+            color: #1a472a;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: 'Gochi Hand', cursive;
+        }
+        
+        .message-line:nth-child(10) {
+            font-size: 32px;
+            color: #e63946;
+            text-align: center;
+            font-family: 'Homemade Apple', cursive;
+            margin-bottom: 40px;
+        }
+        
+        /* Signature */
+        .signature {
+            text-align: right;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px dashed #b6a47c;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .signature-name {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 32px;
+            color: #e63946;
+            margin-bottom: 5px;
+        }
+        
+        .signature-date {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 20px;
+            color: #8d6e63;
+            font-style: italic;
+        }
+        
+        /* Sticker decorations */
+        .sticker {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            z-index: 3;
+            opacity: 0.9;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
+        }
+        
+        .sticker-1 {
+            top: -15px;
+            right: 30px;
+            transform: rotate(15deg);
+        }
+        
+        .sticker-2 {
+            bottom: 30px;
+            left: -20px;
+            transform: rotate(-10deg);
+        }
+        
+        .sticker i {
+            font-size: 40px;
+            color: #e63946;
+        }
+        
+        .sticker-2 i {
+            color: #1a472a;
+        }
+        
+        /* Footer with replay button */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .replay-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+            font-family: 'Gochi Hand', cursive;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .replay-btn:hover {
+            background: #c1121f;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.4);
+        }
+        
+        /* Snowflakes (small, subtle) */
+        .snowflakes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .snowflake {
+            position: absolute;
+            background-color: #e63946;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: fall linear infinite;
+        }
+        
+        /* Keyframes for animations */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .letter-paper {
+                padding: 40px 30px;
+                min-height: 500px;
+            }
+            
+            .paper-lines {
+                left: 30px;
+                right: 30px;
+                top: 40px;
+                bottom: 40px;
+            }
+            
+            .margin-line {
+                left: 20px;
+                top: 40px;
+                bottom: 40px;
+            }
+            
+            .message-line {
+                font-size: 22px;
+                margin-bottom: 18px;
+            }
+            
+            .message-line:nth-child(8) {
+                font-size: 26px;
+            }
+            
+            .message-line:nth-child(9) {
+                font-size: 24px;
+            }
+            
+            .message-line:nth-child(10) {
+                font-size: 26px;
+            }
+            
+            .signature-name {
+                font-size: 26px;
+            }
+            
+            .signature-date {
+                font-size: 18px;
+            }
+            
+            .sticker {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .sticker i {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .letter-paper {
+                padding: 30px 20px;
+                min-height: 450px;
+            }
+            
+            .paper-lines {
+                left: 20px;
+                right: 20px;
+                top: 30px;
+                bottom: 30px;
+            }
+            
+            .margin-line {
+                left: 10px;
+            }
+            
+            .message-line {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+            
+            .message-line:nth-child(8) {
+                font-size: 24px;
+                margin-top: 20px;
+            }
+            
+            .message-line:nth-child(9) {
+                font-size: 22px;
+            }
+            
+            .message-line:nth-child(10) {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            
+            .signature {
+                margin-top: 40px;
+            }
+            
+            .signature-name {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen with Instagram Post - EXACTLY AS YOU PROVIDED -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="insta-header">
+                <div class="profile-pic"></div>
+                <div class="username">Tobi</div>
+            </div>
+            <div class="insta-image" id="instaImage"></div>
+            <div class="insta-icons">
+                <div class="left-icons">
+                    <i class="fas fa-heart" id="heartIcon"></i>
+                    <i class="far fa-comment"></i>
+                    <i class="far fa-paper-plane"></i>
+                </div>
+                <div class="right-icons">
+                    <i class="far fa-bookmark"></i>
+                </div>
+            </div>
+            <div class="likes" id="likesCount">512 likes</div>
+            <div class="caption">
+                <span>mahi</span> Wishing you a very Merry Christmas and a Happy New Year! 🎄🎁✨ #Christmas #NewYear #Blessed
+            </div>
+        </div>
+        
+        <!-- Like Hand -->
+        <div class="like-hand" id="likeHand">👆</div>
+    </div>
+    
+    <!-- Gate Animation -->
+    <div class="gate-container" id="gateContainer">
+        <div class="gate-left" id="gateLeft"></div>
+        <div class="gate-right" id="gateRight"></div>
+    </div>
+    
+    <!-- Main Content - HANDWRITTEN LETTER -->
+    <div class="main-content" id="mainContent">
+        <div class="letter-wrapper">
+            <div class="letter-paper">
+                <!-- Paper lines -->
+                <div class="paper-lines"></div>
+                
+                <!-- Red margin line -->
+                <div class="margin-line"></div>
+                
+                <!-- Sticker decorations -->
+                <div class="sticker sticker-1">
+                    <i class="fas fa-star"></i>
+                </div>
+                
+                <div class="sticker sticker-2">
+                    <i class="fas fa-heart"></i>
+                </div>
+                
+                <!-- Letter Content -->
+                <div class="letter-content">
+                    <div class="message-line">May</div>
+                    <div class="message-line">this</div>
+                    <div class="message-line">Christmas be</div>
+                    <div class="message-line">filled with</div>
+                    <div class="message-line">happiness in all that</div>
+                    <div class="message-line">you do and may this joy</div>
+                    <div class="message-line">continue the whole year through.</div>
+                    
+                    <div class="message-line">Wishing you a Merry Christmas</div>
+                    <div class="message-line">And a Happy</div>
+                    <div class="message-line">New Year</div>
+                    
+                    <div class="signature">
+                        <div class="signature-name">With love,</div>
+                        <div class="signature-date">your Tobi</div>
+                    </div>
+                </div>
+                
+                <!-- Snowflakes -->
+                <div class="snowflakes" id="snowflakes"></div>
+            </div>
+            
+            <div class="footer">
+                <button class="replay-btn" id="replayBtn">
+                    <i class="fas fa-redo-alt"></i> Watch Again
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContent = document.getElementById('mainContent');
+        const gateLeft = document.getElementById('gateLeft');
+        const gateRight = document.getElementById('gateRight');
+        const gateContainer = document.getElementById('gateContainer');
+        const likeHand = document.getElementById('likeHand');
+        const heartIcon = document.getElementById('heartIcon');
+        const likesCount = document.getElementById('likesCount');
+        const replayBtn = document.getElementById('replayBtn');
+        const snowflakes = document.getElementById('snowflakes');
+        const messageLines = document.querySelectorAll('.message-line');
+        
+        // Original message lines text - store for replay
+        const originalMessageTexts = [
+            "May",
+            "this",
+            "Christmas be",
+            "filled with",
+            "happiness in all that",
+            "you do and may this joy",
+            "continue the whole year through.",
+            "Wishing you a Merry Christmas",
+            "And a Happy",
+            "New Year"
+        ];
+        
+        // Create subtle snowflakes
+        function createSnowflakes() {
+            // Clear existing snowflakes
+            snowflakes.innerHTML = '';
+            
+            for (let i = 0; i < 30; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                // Very small size for subtle effect
+                const size = Math.random() * 3 + 1;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                
+                // Random position
+                snowflake.style.left = `${Math.random() * 100}%`;
+                
+                // Very low opacity
+                snowflake.style.opacity = Math.random() * 0.15 + 0.05;
+                
+                // Random animation duration
+                const duration = Math.random() * 15 + 15;
+                snowflake.style.animationDuration = `${duration}s`;
+                
+                snowflakes.appendChild(snowflake);
+            }
+        }
+        
+        // Function to animate message lines
+        function animateMessageLines() {
+            messageLines.forEach((line, index) => {
+                // Reset the line first
+                line.innerHTML = originalMessageTexts[index];
+                line.style.opacity = '0';
+                line.style.transform = 'translateY(20px)';
+                
+                // Animate the line appearing
+                gsap.to(line, {
+                    duration: 0.8,
+                    opacity: 1,
+                    y: 0,
+                    delay: index * 0.2,
+                    ease: "power2.out"
+                });
+            });
+            
+            // Animate stickers
+            gsap.from('.sticker', {
+                duration: 0.8,
+                scale: 0,
+                rotation: 360,
+                stagger: 0.3,
+                ease: "back.out(1.5)",
+                delay: 2
+            });
+            
+            // Animate signature
+            gsap.from('.signature', {
+                duration: 1,
+                opacity: 0,
+                y: 20,
+                delay: 2.5,
+                ease: "power2.out"
+            });
+        }
+        
+        // Start the animation sequence
+        function startAnimation() {
+            const tl = gsap.timeline();
+            
+            // Initial animation for Instagram post
+            tl.from('.loading-content', {
+                duration: 1,
+                scale: 0.8,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            })
+            .from('.insta-header', {
+                duration: 0.5,
+                y: -20,
+                opacity: 0
+            }, "-=0.3")
+            .from('.insta-image', {
+                duration: 0.8,
+                scale: 0,
+                opacity: 0,
+                ease: "power2.out"
+            }, "-=0.2")
+            .from('.left-icons i', {
+                duration: 0.5,
+                scale: 0,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "back.out(1.7)"
+            }, "-=0.2")
+            .from('.right-icons i', {
+                duration: 0.5,
+                scale: 0,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            }, "-=0.3")
+            .from('.likes, .caption', {
+                duration: 0.5,
+                y: 20,
+                opacity: 0
+            }, "-=0.2")
+            
+            // Like hand animation
+            tl.to(likeHand, {
+                duration: 0.5,
+                opacity: 1,
+                x: 100,
+                y: -100,
+                scale: 1.2,
+                ease: "power2.out"
+            })
+            .to(likeHand, {
+                duration: 0.8,
+                x: -150,
+                y: 50,
+                rotation: -15,
+                ease: "power2.inOut"
+            })
+            .to(likeHand, {
+                duration: 0.5,
+                x: -200,
+                y: -80,
+                rotation: 15,
+                ease: "power2.inOut"
+            })
+            .to(likeHand, {
+                duration: 0.5,
+                opacity: 0,
+                x: -250,
+                y: 100,
+                scale: 0.5,
+                ease: "power2.in"
+            })
+            
+            // Heart icon animation
+            tl.to(heartIcon, {
+                duration: 0.3,
+                scale: 1.5,
+                color: "#e63946",
+                ease: "power2.out"
+            })
+            .to(heartIcon, {
+                duration: 0.3,
+                scale: 1,
+                ease: "power2.in"
+            })
+            
+            // Update likes count
+            tl.call(() => {
+                likesCount.textContent = "2,512 likes";
+                heartIcon.classList.remove('far');
+                heartIcon.classList.add('fas');
+            })
+            
+            // Gate animation
+            tl.to(gateLeft, {
+                duration: 1.5,
+                scaleX: 0,
+                ease: "power3.inOut"
+            })
+            .to(gateRight, {
+                duration: 1.5,
+                scaleX: 0,
+                ease: "power3.inOut"
+            }, "-=1.5")
+            
+            // Transition to main content
+            tl.to(loadingScreen, {
+                duration: 0.5,
+                opacity: 0,
+                onComplete: () => {
+                    loadingScreen.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    
+                    // Animate gate away
+                    gsap.to(gateContainer, {
+                        duration: 0.5,
+                        opacity: 0,
+                        onComplete: () => {
+                            gateContainer.style.display = 'none';
+                        }
+                    });
+                    
+                    // Create snowflakes
+                    createSnowflakes();
+                    
+                    // Animate letter paper entrance
+                    gsap.from('.letter-paper', {
+                        duration: 1.2,
+                        y: 80,
+                        opacity: 0,
+                        ease: "back.out(1.2)",
+                        onComplete: animateMessageLines
+                    });
+                }
+            });
+        }
+        
+        // Replay animation function
+        function replayAnimation() {
+            // Reset elements
+            loadingScreen.style.display = 'flex';
+            loadingScreen.style.opacity = 1;
+            mainContent.style.display = 'none';
+            gateContainer.style.display = 'block';
+            gateContainer.style.opacity = 1;
+            gateLeft.style.transform = 'scaleX(1)';
+            gateRight.style.transform = 'scaleX(1)';
+            
+            // Reset likes
+            likesCount.textContent = "512 likes";
+            heartIcon.classList.remove('fas');
+            heartIcon.classList.add('far');
+            heartIcon.style.color = "";
+            
+            // Reset hand
+            likeHand.style.opacity = '0';
+            likeHand.style.transform = 'translate(0, 0)';
+            
+            // Reset message lines
+            messageLines.forEach((line, index) => {
+                line.innerHTML = originalMessageTexts[index];
+                line.style.opacity = '0';
+                line.style.transform = 'translateY(20px)';
+            });
+            
+            // Reset stickers
+            gsap.set('.sticker', { scale: 0 });
+            
+            // Clear snowflakes
+            snowflakes.innerHTML = "";
+            
+            // Start animation
+            startAnimation();
+        }
+        
+        // Event listeners
+        replayBtn.addEventListener('click', replayAnimation);
+        
+        // Start animation when page loads
+        window.addEventListener('load', startAnimation);
+    </script>
+</body>
+</html>
